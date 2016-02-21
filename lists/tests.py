@@ -53,17 +53,23 @@ class HomePageTest(TestCase):
 class ListViewTests(TestCase):
 	
 	def test_displays_all_items(self):
-		list_ = List.objects.create()
-		Item.objects.create(text='1flf', list=list_)
-		Item.objects.create(text='2flf', list=list_)
+		correct_list = List.objects.create()
+		Item.objects.create(text='1flf', list=correct_list)
+		Item.objects.create(text='2flf', list=correct_list)
+		other_list = List.objects.create()
+		Item.objects.create(text='other 1flf', list=other_list)
+		Item.objects.create(text='other 2flf', list=other_list)
 		
-		response = self.client.get('/lists/the-only-list-in-the-world/')
+		response = self.client.get('/lists/%d/' % (correct_list.id,))
 		
 		self.assertContains(response, '1flf')
 		self.assertContains(response, '2flf')
+		self.assertNotContains(response, 'other 1flf')
+		self.assertNotContains(response, 'other 2flf')
 		
 	def test_uses_list_template(self):
-		response = self.client.get('/lists/the-only-list-in-the-world/')
+		list_ = List.objects.create()
+		response = self.client.get('/lists/%d/' % (list_.id,))
 		self.assertTemplateUsed(response, 'lists/list.html')
 		
 class NewListTests(TestCase):
