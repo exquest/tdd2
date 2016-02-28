@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 
 from lists.views import home_page
 from lists.models import Item, List
@@ -36,3 +37,10 @@ class ListAndItemModelTest(TestCase):
 		self.assertEqual(first_saved_item.list, list_)
 		self.assertEqual(second_saved_item.text, second_item_text)
 		self.assertEqual(second_saved_item.list, list_)
+		
+	def test_cannot_save_empty_item_to_list(self):
+		list_ = List.objects.create()
+		item = Item(list=list_, text='')
+		with self.assertRaises(ValidationError):
+			item.save()
+			item.full_clean()
