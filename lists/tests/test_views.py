@@ -79,20 +79,10 @@ class ListViewTests(TestCase):
 		self.assertIsInstance(response.context['form'], ItemForm)
 		self.assertContains(response, 'name="text"')
 		
-	def test_validation_errors_end_up_on_lists_page(self):
-		list_ = List.objects.create()
-		response = self.client.post(
-			'/lists/%d/' % (list_.id,),
-			data = {'text': ''}
-		)
-		self.assertEqual(response.status_code, 200)
-		self.assertTemplateUsed(response, 'lists/list.html')
-		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
-		
 	def post_invalid_input(self):
 		list_ = List.objects.create()
 		return self.client.post(
-			'/list/%d/' % (list_.id,),
+			'/lists/%d/' % (list_.id,),
 			data={'text': ''}
 		)
 		
