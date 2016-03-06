@@ -33,7 +33,7 @@ class ItemModelTest(TestCase):
 			item.save()
 			item.full_clean()
 			
-	def test_duplicates_items_are_invalid(self):
+	def test_duplicate_items_are_invalid(self):
 		list_ = List.objects.create()
 		Item.objects.create(text='bla', list=list_)
 		with self.assertRaises(ValidationError):
