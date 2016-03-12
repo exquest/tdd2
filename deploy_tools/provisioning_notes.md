@@ -34,3 +34,4 @@ Assume we have a user account at /home/username
          ├── source
          ├── static
          └── virtualenv
+fab -u ubuntu -i ~/Documents/CT.pem deploy:host=ubuntu@52.34.55.157
